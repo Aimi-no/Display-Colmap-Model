@@ -339,7 +339,7 @@ def api_download_model():
         modelpath =  path + folder + "/dense/0"
         filename = modelpath + "/decimated.ply"
 
-        os.system('./Blender/blender.exe --background --python "' + path + '\decimation_script.py" -- "' + modelpath +'"')
+        os.system('.\Blender\\blender.exe --background --python "' + path + 'decimation_script.py" -- "' + modelpath +'"')
 
 
         print("Getting file")
