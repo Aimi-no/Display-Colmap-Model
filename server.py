@@ -329,69 +329,18 @@ def api_query_cameras():
         print("ko:", err)
 
 
-def decimate(verts, colours, faces):
-    print("Decimating")
-    numOfVerts = len(verts)
-    while numOfVerts > 65000:
-        #decimuj
-        print(str(numOfVerts) + " vertices")
-        q = queue.PriorityQueue(maxsize = numOfVerts * numOfVerts)
-        for i in range(0, numOfVerts):
-            a = verts[i]
-            for j in range(i + 1, numOfVerts):
-                b = verts[j]
-                d = b - a
-                d = np.square(d)
-                d = np.sum(d)
-                dist = np.sqrt(d)
-                q.put((dist, i, j))
-               # print((dist, i, j))
-        
-        (dist, a, b) = q.get()
-        verts[a] = (verts[a] + verts[b]) / 2
-
-        verts.pop(b)
-
-        numOfVerts = numOfVerts - 1
-
-        matches = 0 # je potreba?
-        numOfFaces = len(faces)
-
-        same = np.nonzero(faces == b)
-        for i in same:
-            faces[i] = a
-
-        greater = np.nonzero(faces > b)
-        for i in greater:
-            faces[i] = faces[i] - 1
-
-
-        '''for i in range(0, numOfFaces):
-            if b in faces[i]:
-                matches += 1
-                idx = faces[i].index(b)
-               # print(faces[i])
-                if a in faces[i]:
-                    faces[i].pop(idx)
-                    if len(faces[i]) < 3:
-                        faces.pop(i)
-                        i -= 1
-                        numOfFaces -= 1
-                else:
-                    faces[i][idx] = a
-            changedIdx = [i for i,v in enumerate(faces[i]) if v > b]
-            for j in range(0,len(changedIdx)):
-                faces[i][j] -= 1'''
-            
-    return verts, colours, faces
-
 @app.route("/api/cv/download_model/", methods=['GET'])
 def api_download_model():
     try:
         global folder
+        folder = "1547206402"
         print("Getting path")
-        path = os.path.dirname(os.path.realpath(__file__)) + "/"
-        filename = path + "1547206402/dense/0/decimated.ply"
+        path = os.path.dirname(os.path.realpath(__file__)) + "/"      
+        modelpath =  path + folder + "/dense/0"
+        filename = modelpath + "/decimated.ply"
+
+        os.system('./Blender/blender.exe --background --python "' + path + '\decimation_script.py" -- "' + modelpath +'"')
+
 
         print("Getting file")
         verts = []
