@@ -39,6 +39,8 @@ public class DrawPLY : MonoBehaviour
         UnityWebRequestAsyncOperation aop = (UnityWebRequestAsyncOperation)op;
 
         meshClass result = JsonUtility.FromJson<meshClass>(aop.webRequest.downloadHandler.text);
+        result.initialize();
+
         Mesh mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 

@@ -10,12 +10,21 @@ using UnityEngine;
 public class meshClass
 {
     public int[] faces;
+    public float[] verts;
+    public int[] cols;
     public Vector3[] vertices;
-    //public Color[] colours;
+    public Color[] colours;
 
-    /*public meshClass(int num, List<CameraItem> cams)
+    public void initialize()
     {
-        numberOfCams = num;
-        cameras = cams;
-    }*/
+        int size = verts.Length;
+        vertices = new Vector3[size / 3];
+        colours = new Color[size / 3];
+        for (int i = 0; i < size/3; i++)
+        {
+            int index = 3 * i;
+            vertices[i] = new Vector3(verts[index], verts[index + 1], verts[index + 2]);
+            colours[i] = new Color(verts[index], verts[index + 1], verts[index + 2]);
+        }
+    }
 }

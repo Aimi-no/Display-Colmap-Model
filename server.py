@@ -396,7 +396,7 @@ def api_download_model():
         print("Getting file")
         verts = []
         colours = []
-        faces = np.array([])
+        faces = []
 
         with open(filename, 'r') as myfile:
             while True:
@@ -414,8 +414,13 @@ def api_download_model():
                 data = myfile.readline()
                 parsed = data.split('\n')[0]
                 parsed = parsed.split(' ')
-                verts.append([float(parsed[0]), float(parsed[1]), float(parsed[2])])
-                colours.append([ int(parsed[3]), int(parsed[4]), int(parsed[5])])
+                verts.append(float(parsed[0]))
+                verts.append(float(parsed[1]))
+                verts.append(float(parsed[2]))
+
+                colours.append(int(parsed[3]))
+                colours.append(int(parsed[4]))
+                colours.append(int(parsed[5]))
                 #print(parsed)
 
 
@@ -429,16 +434,18 @@ def api_download_model():
                     print(num)
                     raise ValueError('Face is not a triangle!')
 
-                faces = np.append(faces, [int(parsed[1]), int(parsed[2]), int(parsed[3])])
+                faces.append(int(parsed[1]))
+                faces.append(int(parsed[2]))
+                faces.append(int(parsed[3]))
                 #print([num,int(parsed[1]), int(parsed[2]), int(parsed[3])])
 
        # verts, colours, faces = decimate(verts, colours, faces)
         mesh = {}
         print("Done")
 
-        mesh['vertices'] = verts
-        mesh['faces'] = faces.tolist()
-        mesh['colours'] = colours
+        mesh['verts'] = verts
+        mesh['faces'] = faces
+        mesh['cols'] = colours
 
         response_list = mesh
         response_dict = dict(response_list)
