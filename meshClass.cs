@@ -11,7 +11,7 @@ public class meshClass
 {
     public int[] faces;
     public Vector3[] vertices;
-    public Vector4[] colours;
+    //public Color[] colours;
 
     /*public meshClass(int num, List<CameraItem> cams)
     {

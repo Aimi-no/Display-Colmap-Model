@@ -41,9 +41,20 @@ public class DrawPLY : MonoBehaviour
         meshClass result = JsonUtility.FromJson<meshClass>(aop.webRequest.downloadHandler.text);
         Mesh mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+
+        Debug.Log(result.vertices[0][0]);
+        Debug.Log(result.vertices[0][1]);
+        Debug.Log(result.vertices[0][2]);
         mesh.vertices = result.vertices;
         //mesh.uv = newUV;
+        Debug.Log(result.faces[0]);
+        Debug.Log(result.faces[1]);
+        Debug.Log(result.faces[2]);
         mesh.triangles = result.faces;
+       // mesh.colors = result.colours;
+        GameObject model = GameObject.Find("GameObject");
+        MeshFilter mf = model.GetComponent<MeshFilter>();
+        mf.mesh = mesh;
 
 
         //Debug.Log(aop.webRequest.downloadHandler.text);

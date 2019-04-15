@@ -391,66 +391,48 @@ def api_download_model():
         global folder
         print("Getting path")
         path = os.path.dirname(os.path.realpath(__file__)) + "/"
-        filename = path + "1547206402/dense/0/meshed-poisson.ply"
+        filename = path + "1547206402/dense/0/decimated.ply"
 
         print("Getting file")
         verts = []
         colours = []
         faces = np.array([])
 
-        with open(filename, 'rb') as myfile:
+        with open(filename, 'r') as myfile:
             while True:
                 data = myfile.readline()
-                if data.startswith(b'element vertex'):
-                    data = data.decode()
+                #print(data)
+                if data.startswith('element vertex'):
                     numOfVerts = int(data.split(' ')[2].split('\n')[0])
                     print("Number of vertices: " + str(numOfVerts))
-                elif data.startswith(b'element face'):
-                    data = data.decode()
+                elif data.startswith('element face'):
                     numOfFaces= int(data.split(' ')[2].split('\n')[0])
                     print("Number of faces: " + str(numOfFaces))
-                elif data.startswith(b'end_header'):
+                elif data.startswith('end_header'):
                     break
             for i in range(0, numOfVerts):
-                """
-                property float x
-                property float y
-                property float z
-                property float value
-                property uchar red
-                property uchar green
-                property uchar blue
-                """
-                size = 4
-                data = myfile.read(size)
-                x =  struct.unpack('<f', data)
-                data = myfile.read(size)
-                y =  struct.unpack('<f', data)
-                data = myfile.read(size)
-                z =  struct.unpack('<f', data)
-                data = myfile.read(size)
-                value =  struct.unpack('<f', data)
-                size = 1
-                data = myfile.read(size)
-                r =  struct.unpack('<B', data)
-                data = myfile.read(size)
-                g =  struct.unpack('<B', data)
-                data = myfile.read(size)
-                b =  struct.unpack('<B', data)
-                verts.append(np.array([x[0], y[0], z[0]]))
-                colours.append(np.array([value[0], r[0], g[0], b[0]]))
+                data = myfile.readline()
+                parsed = data.split('\n')[0]
+                parsed = parsed.split(' ')
+                verts.append([float(parsed[0]), float(parsed[1]), float(parsed[2])])
+                colours.append([ int(parsed[3]), int(parsed[4]), int(parsed[5])])
+                #print(parsed)
 
-            for i in range(0, numOfFaces):
-                size = 1
-                data = myfile.read(size)
-                a =  struct.unpack('<B', data)
-                data = myfile.read(size)
-                b =  struct.unpack('<B', data)
-                data = myfile.read(size)
-                c =  struct.unpack('<B', data)
-                faces = np.append(faces, [a[0], b[0], c[0]])
 
-        verts, colours, faces = decimate(verts, colours, faces)
+
+            for j in range(0, numOfFaces):
+                data = myfile.readline()
+                parsed = data.split('\n')[0]
+                parsed = parsed.split(' ')
+                num =  int(parsed[0])
+                if not num == 3:
+                    print(num)
+                    raise ValueError('Face is not a triangle!')
+
+                faces = np.append(faces, [int(parsed[1]), int(parsed[2]), int(parsed[3])])
+                #print([num,int(parsed[1]), int(parsed[2]), int(parsed[3])])
+
+       # verts, colours, faces = decimate(verts, colours, faces)
         mesh = {}
         print("Done")
 
