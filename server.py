@@ -367,9 +367,9 @@ def api_download_model():
                 verts.append(float(parsed[1]))
                 verts.append(float(parsed[2]))
 
-                colours.append(int(parsed[3]))
-                colours.append(int(parsed[4]))
-                colours.append(int(parsed[5]))
+                colours.append(float(parsed[3]))
+                colours.append(float(parsed[4]))
+                colours.append(float(parsed[5]))
                 #print(parsed)
 
 

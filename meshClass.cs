@@ -11,7 +11,7 @@ public class meshClass
 {
     public int[] faces;
     public float[] verts;
-    public int[] cols;
+    public float[] cols;
     public Vector3[] vertices;
     public Color[] colours;
 
@@ -24,7 +24,7 @@ public class meshClass
         {
             int index = 3 * i;
             vertices[i] = new Vector3(verts[index], verts[index + 1], verts[index + 2]);
-            colours[i] = new Color(verts[index], verts[index + 1], verts[index + 2]);
+            colours[i] = new Color(cols[index] / 255.0f, cols[index + 1] / 255.0f, cols[index + 2] / 255.0f);
         }
     }
 }
